@@ -1,11 +1,12 @@
-import java.util.List;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class PhotoController {
+public class PhotoController implements Serializable{
 
     private final PhotoLibrary photoLibrary;
     private final MainWindow view;
@@ -13,18 +14,16 @@ public class PhotoController {
     public PhotoController(PhotoLibrary photoLibrary, MainWindow view){
         this.photoLibrary = photoLibrary;
         this.view = view;
+        view.getPhotoListPanel().generateImageList(photoLibrary.getAllPhotos());
     }
 
     public void addPhoto(File photoFile){
         Photo photo = new Photo(photoFile);
         photoLibrary.addPhotoToLibrary(photo);
+        view.getPhotoListPanel().addPhotoToList(photo);
+
 
         photoLibrary.printAllPhotoPaths();
-    }
-
-    public void updatePhotoList(){
-        List<Photo> photos = photoLibrary.getAllPhotos();
-        view.getPhotoListPanel().generateImageList(photos);
     }
 
     public void importPhotos(JFrame parent){
@@ -45,7 +44,7 @@ public class PhotoController {
                 }
             }
         }
-        updatePhotoList();
+        this.saveLibraryToFile();
     }
 
     public boolean isImageFile(File file) {
@@ -54,4 +53,11 @@ public class PhotoController {
                 name.endsWith(".png") || name.endsWith(".gif");
     }
 
+    public void saveLibraryToFile(){
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("photos.ser"))){
+            out.writeObject(photoLibrary);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

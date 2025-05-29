@@ -1,11 +1,9 @@
 import javax.swing.*;
 
 public class MainMenuBar extends JMenuBar {
-    private final MainWindow mainWindow;
     private final JFrame parentFrame;
     private PhotoController controller;
     public MainMenuBar(MainWindow mainWindow, JFrame parentFrame) {
-        this.mainWindow = mainWindow;
         this.parentFrame = parentFrame;
 
         add(createHelpMenu());

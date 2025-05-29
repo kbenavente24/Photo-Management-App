@@ -1,6 +1,7 @@
 import java.io.File;
+import java.io.Serializable;
 
-public class Photo {
+public class Photo implements Serializable{
 
     private File file;
     private Boolean isFavorite;
@@ -21,6 +22,4 @@ public class Photo {
     public File getFile(){
         return this.file;
     }
-
-
 }

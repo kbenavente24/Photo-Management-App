@@ -43,6 +43,7 @@ public class PhotoListDisplay extends JPanel{
         JScrollPane previewScrollPane = new JScrollPane(previewPanel);
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPane, previewScrollPane);
+        splitPane.setDividerLocation(300);
 
         photoList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -75,6 +76,11 @@ public class PhotoListDisplay extends JPanel{
             listModel.addElement(photo.getFile());
             System.out.println("found!");
         }
+    }
+
+    public void addPhotoToList(Photo photo){
+        listModel.addElement(photo.getFile());
+        System.out.println("found!");
     }
 
     public void setController(PhotoController controller){
