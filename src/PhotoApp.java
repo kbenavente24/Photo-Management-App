@@ -24,5 +24,4 @@ public class PhotoApp {
         }
         return new PhotoLibrary();
     }
-
 }

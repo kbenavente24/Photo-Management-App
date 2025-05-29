@@ -74,7 +74,6 @@ public class PhotoListDisplay extends JPanel{
     public void generateImageList(List<Photo> photos){
         for (Photo photo : photos){
             listModel.addElement(photo.getFile());
-            System.out.println("found!");
         }
     }
 
@@ -94,6 +93,4 @@ public class PhotoListDisplay extends JPanel{
     public JSplitPane getSplitPane(){
         return splitPane;
     }
-
-
 }

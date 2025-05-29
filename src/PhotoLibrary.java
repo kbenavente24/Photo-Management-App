@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PhotoLibrary implements Serializable{
     List<Photo> photoCollection = new ArrayList<Photo>();
 

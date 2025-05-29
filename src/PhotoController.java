@@ -1,5 +1,6 @@
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,9 +22,6 @@ public class PhotoController implements Serializable{
         Photo photo = new Photo(photoFile);
         photoLibrary.addPhotoToLibrary(photo);
         view.getPhotoListPanel().addPhotoToList(photo);
-
-
-        photoLibrary.printAllPhotoPaths();
     }
 
     public void importPhotos(JFrame parent){
