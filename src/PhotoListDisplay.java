@@ -1,3 +1,6 @@
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Image;
 import java.io.File;
 import java.util.List;
 
@@ -15,6 +18,10 @@ public class PhotoListDisplay extends JPanel{
 
     private final JSplitPane splitPane;
 
+    private final JPanel previewPanel;
+    
+    private final JLabel previewLabel;
+
     public PhotoListDisplay(){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -27,7 +34,11 @@ public class PhotoListDisplay extends JPanel{
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Your Photos"));
 
-        JPanel previewPanel = new JPanel();
+        previewPanel = new JPanel(new BorderLayout());
+        previewLabel = new JLabel();
+        previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        previewPanel.add(previewLabel, BorderLayout.CENTER);
+
 
         JScrollPane previewScrollPane = new JScrollPane(previewPanel);
 
@@ -39,7 +50,22 @@ public class PhotoListDisplay extends JPanel{
                 if (selectedFile != null) {
                     System.out.println("Selected: " + selectedFile.getAbsolutePath());
                     // You could call controller.displayPhotoDetails(selectedFile), etc.
+                    ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
+
+                    Image scaledImage = icon.getImage().getScaledInstance(previewPanel.getWidth(), previewPanel.getHeight(), Image.SCALE_SMOOTH);
+                    previewLabel.setIcon(new ImageIcon(scaledImage));
                 }
+            }
+        });
+
+        photoList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof File file) {
+                    value = file.getName(); // Only display the file name
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
         });
     }
@@ -55,7 +81,6 @@ public class PhotoListDisplay extends JPanel{
         this.controller = controller;
     }
 
-    //Returns scroll bar panel
     public JScrollPane getScrollPane() {
         return scrollPane;
     }
