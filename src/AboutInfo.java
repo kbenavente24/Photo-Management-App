@@ -1,5 +1,5 @@
 public class AboutInfo {
     public static  String VERSION = "0.40";
-    public static  String USER_NAME = "Kobe";
-    public static  String USER_EMAIL = "kobe@gmail.com";
+    public static  String USER_NAME = "No name registered. Sign in to add a name.";
+    public static  String USER_EMAIL = "No email registered. Sign in to add an email.";
 }

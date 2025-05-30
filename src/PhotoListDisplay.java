@@ -79,7 +79,6 @@ public class PhotoListDisplay extends JPanel{
 
     public void addPhotoToList(Photo photo){
         listModel.addElement(photo.getFile());
-        System.out.println("found!");
     }
 
     public void setController(PhotoController controller){
