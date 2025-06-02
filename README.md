@@ -1,4 +1,4 @@
-# Photo Management App
+# Photo Manager
 "A lightweight, image-focused desktop file manager."
 
 ## 📝 Description
