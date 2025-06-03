@@ -8,6 +8,7 @@ public class MainMenuBar extends JMenuBar {
 
         add(createHelpMenu());
         add(createFileMenu());
+        add(createFilterMenu());
         add(Box.createHorizontalGlue());
         add(createSignInButton());
     }
@@ -47,6 +48,23 @@ public class MainMenuBar extends JMenuBar {
         JButton signInButton = new JButton("Sign In");
         signInButton.addActionListener(e -> showSignInDialog());
         return signInButton;
+    }
+
+    private JMenuItem createFilterMenu(){
+        JMenu filterMenu = new JMenu("Filter");
+        JMenuItem allItem = new JMenuItem("Show All");
+        allItem.addActionListener(e -> {
+            controller.reloadAllImages();
+        });
+
+        filterMenu.add(allItem);
+
+        JMenuItem favoritesItem = new JMenuItem("Favorites");
+        favoritesItem.addActionListener(e -> {
+            controller.checkAndDisplayFavorites();
+        });
+        filterMenu.add(favoritesItem);
+        return filterMenu;
     }
 
     private void showAboutDialog() {

@@ -1,3 +1,4 @@
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
@@ -6,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoController implements Serializable{
 
@@ -58,4 +61,21 @@ public class PhotoController implements Serializable{
             e.printStackTrace();
         }
     }
+
+    public void checkAndDisplayFavorites(){
+        List<Photo> favoritesToBeDisplayed = new ArrayList<>();
+        
+        view.getPhotoListPanel().clearImageList();
+        for(Photo photo : photoLibrary.getAllPhotos()){
+            if(photo.getFavoriteStatus()){
+                System.out.println("Photo added!");
+                view.getPhotoListPanel().addPhotoToList(photo);
+            }
+        }
+    }
+    public void reloadAllImages(){
+        view.getPhotoListPanel().clearImageList();
+        view.getPhotoListPanel().generateImageList(photoLibrary.getAllPhotos());
+    }
+
 }

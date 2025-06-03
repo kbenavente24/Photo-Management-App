@@ -19,6 +19,15 @@ public class Photo implements Serializable{
         this.isFavorite = favoriteStatus;
     }
 
+    public Boolean getFavoriteStatus(){
+        return this.isFavorite;
+    }
+
+    @Override
+    public String toString() {
+        return file.getName(); // or file.getAbsolutePath();
+    }
+
     public File getFile(){
         return this.file;
     }
