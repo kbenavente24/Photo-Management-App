@@ -49,20 +49,20 @@ public class PhotoListDisplay extends JPanel{
         JScrollPane previewScrollPane = new JScrollPane(previewPanel);
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSidePhotoList, previewScrollPane);
-        splitPane.setDividerLocation(300);
+        splitPane.setDividerLocation(350);
 
         photoList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 Photo selectedPhoto = photoList.getSelectedValue();
                 if (selectedPhoto != null) {
-                    File selectedFile = selectedPhoto.getFile();
-                    System.out.println("Selected: " + selectedFile.getAbsolutePath());
+                    // File selectedFile = selectedPhoto.getFile();
+                    System.out.println("Selected: " + selectedPhoto.getFilePath());
                     System.out.println("Currently selected photo: ");
                     currentlySelectedPhoto = selectedPhoto;
                     changeFavoriteIcon();
                     System.out.println(currentlySelectedPhoto);
                     // You could call controller.displayPhotoDetails(selectedFile), etc.
-                    ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
+                    ImageIcon icon = new ImageIcon(selectedPhoto.getFilePath());
 
                     Image scaledImage = icon.getImage().getScaledInstance(previewPanel.getWidth(), previewPanel.getHeight(), Image.SCALE_SMOOTH);
                     previewLabel.setIcon(new ImageIcon(scaledImage));
@@ -92,6 +92,7 @@ public class PhotoListDisplay extends JPanel{
             Image scaledImage = fullHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
             favoriteButton.setIcon(new ImageIcon(scaledImage));
         }
+        controller.saveLibraryToFile();
     }
 
     public JPanel leftSide(){
@@ -109,12 +110,18 @@ public class PhotoListDisplay extends JPanel{
             changeFavoriteIcon();
             System.out.println("saved to favorites!");
         });
-        
-        JButton addToAlbumButton = new JButton("Add to Album");
         buttonPanel.add(favoriteButton);
+
+        JButton createAlbumButton = new JButton("Create an Album");
+        buttonPanel.add(createAlbumButton);
+
+        JButton addToAlbumButton = new JButton("Add to Album");
         buttonPanel.add(addToAlbumButton);
+
         buttonPanel.setMaximumSize(buttonPanel.getPreferredSize());
         leftSidePanel.add(buttonPanel);
+
+
         return leftSidePanel;
     }
 

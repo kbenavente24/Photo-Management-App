@@ -19,18 +19,9 @@ public class MainMenuBar extends JMenuBar {
 
     private JMenu createFileMenu() {
         JMenu fileMenu = new JMenu("File");
-
-        JMenuItem createAlbumItem = new JMenuItem("Create Album");
-        //createAlbumItem.addActionListener(e -> controller.createAlbum());
-
         JMenuItem importPhotosItem = new JMenuItem("Import Photos");
         importPhotosItem.addActionListener(e -> controller.importPhotos(parentFrame));
-
-        JMenuItem exportPhotosItem = new JMenuItem("Export Photos");
-
-        fileMenu.add(createAlbumItem);
         fileMenu.add(importPhotosItem);
-        fileMenu.add(exportPhotosItem);
         return fileMenu;
     }
 

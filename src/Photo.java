@@ -3,16 +3,16 @@ import java.io.Serializable;
 
 public class Photo implements Serializable{
 
-    private File file;
+    private String filePath;
     private Boolean isFavorite;
 
-    public Photo(File file){
-        this.file = file;
+    public Photo(String filePath){
+        this.filePath = filePath;
         this.isFavorite = false;
     }
 
     public String getFilePath(){
-        return this.file.getAbsolutePath();
+        return this.filePath;
     }
 
     public void setFavorite(){
@@ -29,10 +29,8 @@ public class Photo implements Serializable{
 
     @Override
     public String toString() {
-        return file.getName(); // or file.getAbsolutePath();
+        File photoFile = new File(filePath);
+        return photoFile.getName(); // or file.getAbsolutePath();
     }
 
-    public File getFile(){
-        return this.file;
-    }
 }

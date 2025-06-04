@@ -21,8 +21,8 @@ public class PhotoController implements Serializable{
         view.getPhotoListPanel().generateImageList(photoLibrary.getAllPhotos());
     }
 
-    public void addPhoto(File photoFile){
-        Photo photo = new Photo(photoFile);
+    public void addPhoto(String absoluteFilePath){
+        Photo photo = new Photo(absoluteFilePath);
         photoLibrary.addPhotoToLibrary(photo);
         view.getPhotoListPanel().addPhotoToList(photo);
     }
@@ -40,7 +40,7 @@ public class PhotoController implements Serializable{
             if(files != null){
                 for(File file : files){
                     if(file.isFile() && isImageFile(file)){
-                        addPhoto(file);
+                        addPhoto(file.getAbsolutePath());
                     }
                 }
             }
@@ -61,6 +61,14 @@ public class PhotoController implements Serializable{
             e.printStackTrace();
         }
     }
+
+    // public void saveFavoritesToFile(){
+    //     try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("favorites.ser"))){
+    //         out.writeObject(photoLibrary);
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
     public void checkAndDisplayFavorites(){
         List<Photo> favoritesToBeDisplayed = new ArrayList<>();
