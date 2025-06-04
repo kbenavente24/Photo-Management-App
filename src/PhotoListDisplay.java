@@ -12,9 +12,9 @@ public class PhotoListDisplay extends JPanel{
 
     private PhotoController controller;
 
-    private DefaultListModel<Photo> listModel;
+    private DefaultListModel<Object> listModel;
 
-    private JList<Photo> photoList;
+    private JList<Object> photoList;
 
     private final JSplitPane splitPane;
 
@@ -22,7 +22,8 @@ public class PhotoListDisplay extends JPanel{
     
     private final JLabel previewLabel;
 
-    private Photo currentlySelectedPhoto;
+    private Object currentlySelectedObject;
+
     
     private JButton favoriteButton;
 
@@ -53,19 +54,26 @@ public class PhotoListDisplay extends JPanel{
 
         photoList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                Photo selectedPhoto = photoList.getSelectedValue();
+                Object selectedPhoto = photoList.getSelectedValue();
                 if (selectedPhoto != null) {
+                    if(selectedPhoto instanceof Photo){
+                    Photo photoSelected = (Photo) selectedPhoto;
+                    currentlySelectedObject = photoSelected;
+    
                     // File selectedFile = selectedPhoto.getFile();
-                    System.out.println("Selected: " + selectedPhoto.getFilePath());
+                    System.out.println("Selected: " + photoSelected.getFilePath());
                     System.out.println("Currently selected photo: ");
-                    currentlySelectedPhoto = selectedPhoto;
                     changeFavoriteIcon();
-                    System.out.println(currentlySelectedPhoto);
                     // You could call controller.displayPhotoDetails(selectedFile), etc.
-                    ImageIcon icon = new ImageIcon(selectedPhoto.getFilePath());
+                    ImageIcon icon = new ImageIcon(photoSelected.getFilePath());
 
                     Image scaledImage = icon.getImage().getScaledInstance(previewPanel.getWidth(), previewPanel.getHeight(), Image.SCALE_SMOOTH);
                     previewLabel.setIcon(new ImageIcon(scaledImage));
+                    } else {
+                        currentlySelectedObject = (Album) selectedPhoto;
+                        changeFavoriteIcon();
+                        previewLabel.setIcon(null);
+                    }
                 }
             }
         });
@@ -74,8 +82,10 @@ public class PhotoListDisplay extends JPanel{
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index,
                                                           boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof File file) {
-                    value = file.getName(); // Only display the file name
+                if (value instanceof Photo photo) {
+                    value = "📷 " + photo; // Only display the file name
+                } else if (value instanceof Album album){
+                    value = "📁 " + album;
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
@@ -83,16 +93,31 @@ public class PhotoListDisplay extends JPanel{
     }
 
     public void changeFavoriteIcon(){
-        if(currentlySelectedPhoto.getFavoriteStatus() == false){
-            ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
-            Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-            favoriteButton.setIcon(new ImageIcon(scaledImage));
+        if(currentlySelectedObject instanceof Album){
+            Album objectToAlbum = (Album) currentlySelectedObject;
+            if(objectToAlbum.getFavoriteStatus() == false){
+                ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+                Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                favoriteButton.setIcon(new ImageIcon(scaledImage));
+            }   else {
+                ImageIcon fullHeartButtonImage = new ImageIcon("src/Resources/FullHeart.png");
+                Image scaledImage = fullHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                favoriteButton.setIcon(new ImageIcon(scaledImage));
+            }
+            controller.saveAlbumLibraryToFile();
         } else {
-            ImageIcon fullHeartButtonImage = new ImageIcon("src/Resources/FullHeart.png");
-            Image scaledImage = fullHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-            favoriteButton.setIcon(new ImageIcon(scaledImage));
+            Photo objectToPhoto = (Photo) currentlySelectedObject;
+            if(objectToPhoto.getFavoriteStatus() == false){
+                ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+                Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                favoriteButton.setIcon(new ImageIcon(scaledImage));
+            }   else {
+                ImageIcon fullHeartButtonImage = new ImageIcon("src/Resources/FullHeart.png");
+                Image scaledImage = fullHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+                favoriteButton.setIcon(new ImageIcon(scaledImage));
+            }
+            controller.saveLibraryToFile();
         }
-        controller.saveLibraryToFile();
     }
 
     public JPanel leftSide(){
@@ -106,13 +131,32 @@ public class PhotoListDisplay extends JPanel{
         favoriteButton = new JButton(new ImageIcon(scaledImage));
 
         favoriteButton.addActionListener(e -> {
-            currentlySelectedPhoto.setFavorite();
+            if(currentlySelectedObject != null){
+                System.out.println("TRIGGERED FAVORITE BUTTON");
+                System.out.println("");
+                if(currentlySelectedObject instanceof Album){
+                    System.out.println("TRIGGERED ALBUM FAVORITE ");
+                    System.out.println("");
+                    Album objectToAlbum = (Album) currentlySelectedObject;
+                    System.out.println("CURRENT FAVORITE STATUS OF ALBUM: ");
+                    System.out.println(objectToAlbum.getFavoriteStatus());
+                    objectToAlbum.setFavorite();
+                    System.out.println("NEW STATUS: ");
+                    System.out.println(objectToAlbum.getFavoriteStatus());
+                } else {
+                    Photo objectToPhoto = (Photo) currentlySelectedObject;
+                    objectToPhoto.setFavorite();
+                }
+            }
             changeFavoriteIcon();
             System.out.println("saved to favorites!");
         });
         buttonPanel.add(favoriteButton);
 
         JButton createAlbumButton = new JButton("Create an Album");
+        createAlbumButton.addActionListener(e -> {
+            showCreateAlbumPanel();
+        });
         buttonPanel.add(createAlbumButton);
 
         JButton addToAlbumButton = new JButton("Add to Album");
@@ -125,14 +169,45 @@ public class PhotoListDisplay extends JPanel{
         return leftSidePanel;
     }
 
+    public void showCreateAlbumPanel(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JTextField albumNameField = new JTextField(15);
+
+        panel.add(new JLabel("Enter Album Name:"));
+        panel.add(albumNameField);
+
+        int result = JOptionPane.showConfirmDialog(this.splitPane, panel, 
+        "Create Album",
+        JOptionPane.OK_CANCEL_OPTION, 
+        JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION){
+            String albumName = albumNameField.getText();
+            JOptionPane.showMessageDialog(this.splitPane, "Album \"" + albumName + "\" created!");
+            controller.addAlbum(albumName);
+        }
+    }
+
     public void generateImageList(List<Photo> photos){
         for (Photo photo : photos){
             listModel.addElement(photo);
         }
     }
 
+    public void generateAlbumList(List<Album> albums){
+        for(Album album : albums){
+            listModel.addElement(album);
+        }
+    }
+
     public void addPhotoToList(Photo photo){
         listModel.addElement(photo);
+    }
+
+    public void addAlbumToList(Album album){
+        listModel.addElement(album);
     }
 
     public void setController(PhotoController controller){

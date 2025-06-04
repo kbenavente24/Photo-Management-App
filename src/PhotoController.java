@@ -13,18 +13,29 @@ import java.util.List;
 public class PhotoController implements Serializable{
 
     private final PhotoLibrary photoLibrary;
+    private final AlbumLibrary albumLibrary;
     private final MainWindow view;
 
-    public PhotoController(PhotoLibrary photoLibrary, MainWindow view){
+    public PhotoController(PhotoLibrary photoLibrary, AlbumLibrary albumLibrary,
+    MainWindow view){
         this.photoLibrary = photoLibrary;
+        this.albumLibrary = albumLibrary;
         this.view = view;
         view.getPhotoListPanel().generateImageList(photoLibrary.getAllPhotos());
+        view.getPhotoListPanel().generateAlbumList(albumLibrary.getAllAlbums());
     }
 
     public void addPhoto(String absoluteFilePath){
         Photo photo = new Photo(absoluteFilePath);
         photoLibrary.addPhotoToLibrary(photo);
         view.getPhotoListPanel().addPhotoToList(photo);
+    }
+    
+    public void addAlbum(String albumName){
+        Album album = new Album(albumName);
+        albumLibrary.addAlbumToLibrary(album);
+        view.getPhotoListPanel().addAlbumToList(album);
+        saveAlbumLibraryToFile();
     }
 
     public void importPhotos(JFrame parent){
@@ -62,28 +73,33 @@ public class PhotoController implements Serializable{
         }
     }
 
-    // public void saveFavoritesToFile(){
-    //     try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("favorites.ser"))){
-    //         out.writeObject(photoLibrary);
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+    public void saveAlbumLibraryToFile(){
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("albums.ser"))){
+            out.writeObject(albumLibrary);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void checkAndDisplayFavorites(){
-        List<Photo> favoritesToBeDisplayed = new ArrayList<>();
         
         view.getPhotoListPanel().clearImageList();
+        for(Album album : albumLibrary.getAllAlbums()){
+            if(album.getFavoriteStatus()){
+                view.getPhotoListPanel().addAlbumToList(album);
+            }
+        }
         for(Photo photo : photoLibrary.getAllPhotos()){
             if(photo.getFavoriteStatus()){
-                System.out.println("Photo added!");
                 view.getPhotoListPanel().addPhotoToList(photo);
             }
         }
     }
+    
     public void reloadAllImages(){
         view.getPhotoListPanel().clearImageList();
         view.getPhotoListPanel().generateImageList(photoLibrary.getAllPhotos());
+        view.getPhotoListPanel().generateAlbumList(albumLibrary.getAllAlbums());
     }
 
 }
