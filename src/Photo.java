@@ -15,8 +15,12 @@ public class Photo implements Serializable{
         return this.file.getAbsolutePath();
     }
 
-    public void setFavorite(Boolean favoriteStatus){
-        this.isFavorite = favoriteStatus;
+    public void setFavorite(){
+        if(this.isFavorite){
+            this.isFavorite = false;
+        } else {
+            this.isFavorite = true;
+        }
     }
 
     public Boolean getFavoriteStatus(){

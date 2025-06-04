@@ -23,6 +23,8 @@ public class PhotoListDisplay extends JPanel{
     private final JLabel previewLabel;
 
     private Photo currentlySelectedPhoto;
+    
+    private JButton favoriteButton;
 
     public PhotoListDisplay(){
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -57,6 +59,7 @@ public class PhotoListDisplay extends JPanel{
                     System.out.println("Selected: " + selectedFile.getAbsolutePath());
                     System.out.println("Currently selected photo: ");
                     currentlySelectedPhoto = selectedPhoto;
+                    changeFavoriteIcon();
                     System.out.println(currentlySelectedPhoto);
                     // You could call controller.displayPhotoDetails(selectedFile), etc.
                     ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
@@ -79,16 +82,34 @@ public class PhotoListDisplay extends JPanel{
         });
     }
 
+    public void changeFavoriteIcon(){
+        if(currentlySelectedPhoto.getFavoriteStatus() == false){
+            ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+            Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+            favoriteButton.setIcon(new ImageIcon(scaledImage));
+        } else {
+            ImageIcon fullHeartButtonImage = new ImageIcon("src/Resources/FullHeart.png");
+            Image scaledImage = fullHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+            favoriteButton.setIcon(new ImageIcon(scaledImage));
+        }
+    }
+
     public JPanel leftSide(){
         JPanel leftSidePanel = new JPanel();
         leftSidePanel.setLayout(new BoxLayout(leftSidePanel, BoxLayout.Y_AXIS));
 
         JPanel buttonPanel = new JPanel();
-        JButton favoriteButton = new JButton("Favorite");
+
+        ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+        Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+        favoriteButton = new JButton(new ImageIcon(scaledImage));
+
         favoriteButton.addActionListener(e -> {
-            currentlySelectedPhoto.setFavorite(true);
+            currentlySelectedPhoto.setFavorite();
+            changeFavoriteIcon();
             System.out.println("saved to favorites!");
         });
+        
         JButton addToAlbumButton = new JButton("Add to Album");
         buttonPanel.add(favoriteButton);
         buttonPanel.add(addToAlbumButton);
