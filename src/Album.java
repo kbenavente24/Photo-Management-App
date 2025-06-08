@@ -24,6 +24,10 @@ public class Album implements Serializable{
         }
     }
 
+    public List<Photo> getListOfPhotosFromAlbum(){
+        return photoCollection;
+    }
+
     public Boolean getFavoriteStatus(){
         return this.isFavorite;
     }

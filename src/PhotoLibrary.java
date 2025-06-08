@@ -33,4 +33,12 @@ public class PhotoLibrary implements Serializable{
         }
     }
 
+    public Photo getPhotoByPath(String path){
+        for (Photo p : photoCollection) {
+            if(p.getFilePath().equals(path)){
+                return p;
+            }
+        }
+        return null;
+    }
 }

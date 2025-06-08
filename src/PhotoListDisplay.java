@@ -1,7 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.*;
@@ -24,10 +23,13 @@ public class PhotoListDisplay extends JPanel{
 
     private Object currentlySelectedObject;
 
+    private MainWindow mainWindow;
+
     
     private JButton favoriteButton;
 
-    public PhotoListDisplay(){
+    public PhotoListDisplay(MainWindow mainWindow){
+        this.mainWindow = mainWindow;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         listModel = new DefaultListModel<>();
@@ -59,19 +61,19 @@ public class PhotoListDisplay extends JPanel{
                     if(selectedPhoto instanceof Photo){
                     Photo photoSelected = (Photo) selectedPhoto;
                     currentlySelectedObject = photoSelected;
-    
-                    // File selectedFile = selectedPhoto.getFile();
-                    System.out.println("Selected: " + photoSelected.getFilePath());
-                    System.out.println("Currently selected photo: ");
+
                     changeFavoriteIcon();
-                    // You could call controller.displayPhotoDetails(selectedFile), etc.
+                   
                     ImageIcon icon = new ImageIcon(photoSelected.getFilePath());
 
                     Image scaledImage = icon.getImage().getScaledInstance(previewPanel.getWidth(), previewPanel.getHeight(), Image.SCALE_SMOOTH);
                     previewLabel.setIcon(new ImageIcon(scaledImage));
                     } else {
-                        currentlySelectedObject = (Album) selectedPhoto;
+                        Album currentlySelectedObjectToAlbum = (Album) selectedPhoto;
+                        currentlySelectedObject = currentlySelectedObjectToAlbum;
                         changeFavoriteIcon();
+                        controller.checkAndDisplayFromAlbum(currentlySelectedObjectToAlbum);
+
                         previewLabel.setIcon(null);
                     }
                 }
@@ -105,7 +107,7 @@ public class PhotoListDisplay extends JPanel{
                 favoriteButton.setIcon(new ImageIcon(scaledImage));
             }
             controller.saveAlbumLibraryToFile();
-        } else {
+        } else if(currentlySelectedObject instanceof Photo){
             Photo objectToPhoto = (Photo) currentlySelectedObject;
             if(objectToPhoto.getFavoriteStatus() == false){
                 ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
@@ -117,6 +119,10 @@ public class PhotoListDisplay extends JPanel{
                 favoriteButton.setIcon(new ImageIcon(scaledImage));
             }
             controller.saveLibraryToFile();
+        } else {
+            ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+            Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+            favoriteButton.setIcon(new ImageIcon(scaledImage));
         }
     }
 
@@ -132,24 +138,15 @@ public class PhotoListDisplay extends JPanel{
 
         favoriteButton.addActionListener(e -> {
             if(currentlySelectedObject != null){
-                System.out.println("TRIGGERED FAVORITE BUTTON");
-                System.out.println("");
                 if(currentlySelectedObject instanceof Album){
-                    System.out.println("TRIGGERED ALBUM FAVORITE ");
-                    System.out.println("");
                     Album objectToAlbum = (Album) currentlySelectedObject;
-                    System.out.println("CURRENT FAVORITE STATUS OF ALBUM: ");
-                    System.out.println(objectToAlbum.getFavoriteStatus());
                     objectToAlbum.setFavorite();
-                    System.out.println("NEW STATUS: ");
-                    System.out.println(objectToAlbum.getFavoriteStatus());
                 } else {
                     Photo objectToPhoto = (Photo) currentlySelectedObject;
                     objectToPhoto.setFavorite();
                 }
             }
             changeFavoriteIcon();
-            System.out.println("saved to favorites!");
         });
         buttonPanel.add(favoriteButton);
 
@@ -160,7 +157,43 @@ public class PhotoListDisplay extends JPanel{
         buttonPanel.add(createAlbumButton);
 
         JButton addToAlbumButton = new JButton("Add to Album");
+        addToAlbumButton.addActionListener(e ->{
+            if(currentlySelectedObject instanceof Photo){
+                List<Album> albumCollection = controller.getAlbumCollection();
+                if(albumCollection.isEmpty()){
+                    JOptionPane.showMessageDialog(mainWindow, "No albums available. Create an album first.");
+                    return;
+                }
+
+                DefaultListModel<Album> albumListModel = new DefaultListModel<>();
+                for(Album album : albumCollection){
+                    albumListModel.addElement(album);
+                }
+
+                JList<Album> albumJList = new JList<>(albumListModel);
+                albumJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                JScrollPane albumScrollPane = new JScrollPane(albumJList);
+                albumScrollPane.setPreferredSize(new java.awt.Dimension(250,150));
+
+                int result = JOptionPane.showConfirmDialog(mainWindow, albumScrollPane, "Select Album"
+                ,JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                if(result == JOptionPane.OK_OPTION){
+                    Album selectedAlbum = albumJList.getSelectedValue();
+                    if (selectedAlbum != null){
+                        controller.addPhotoToAlbum((Photo) currentlySelectedObject, selectedAlbum);
+                        JOptionPane.showMessageDialog(mainWindow, "Photo added to album: " + selectedAlbum);
+                        controller.saveAlbumLibraryToFile();
+                    } else {
+                        JOptionPane.showMessageDialog(mainWindow, "No album selected.");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(mainWindow, "You must select a photo to add to an album.");
+            }
+        });
         buttonPanel.add(addToAlbumButton);
+
 
         buttonPanel.setMaximumSize(buttonPanel.getPreferredSize());
         leftSidePanel.add(buttonPanel);
@@ -178,14 +211,14 @@ public class PhotoListDisplay extends JPanel{
         panel.add(new JLabel("Enter Album Name:"));
         panel.add(albumNameField);
 
-        int result = JOptionPane.showConfirmDialog(this.splitPane, panel, 
+        int result = JOptionPane.showConfirmDialog(mainWindow, panel, 
         "Create Album",
         JOptionPane.OK_CANCEL_OPTION, 
         JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION){
             String albumName = albumNameField.getText();
-            JOptionPane.showMessageDialog(this.splitPane, "Album \"" + albumName + "\" created!");
+            JOptionPane.showMessageDialog(mainWindow, "Album \"" + albumName + "\" created!");
             controller.addAlbum(albumName);
         }
     }
@@ -225,4 +258,11 @@ public class PhotoListDisplay extends JPanel{
     public void clearImageList(){
         listModel.clear();
     }
+
+    public void clearFavorite(){
+        this.currentlySelectedObject = null;
+        changeFavoriteIcon();
+        previewLabel.setIcon(null);
+    }
+
 }

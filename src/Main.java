@@ -1,4 +1,3 @@
-import java.io.File;
 import javax.swing.SwingUtilities;
 
 public class Main {

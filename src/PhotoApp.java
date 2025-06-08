@@ -4,10 +4,10 @@ public class PhotoApp {
 
     public void start() {
         ExportImportUserInfo.load();
-        PhotoLibrary model = loadPhotoLibrary();
+        PhotoLibrary photoModel = loadPhotoLibrary();
         AlbumLibrary albumModel = loadAlbumLibrary();
         MainWindow view = new MainWindow();
-        PhotoController controller = new PhotoController(model, albumModel, view);
+        PhotoController controller = new PhotoController(photoModel, albumModel, view);
 
         view.setController(controller);
         view.getMainMenuBar().setController(controller);
@@ -15,7 +15,10 @@ public class PhotoApp {
     }
 
     private PhotoLibrary loadPhotoLibrary() {
+        //Creating a file object that points to the file "photos.ser"
+        //Note: this does not create the file on disk, it just creates a Java File object to check for existence.
         File saveFile = new File("photos.ser");
+        //Check if the file actually exists on disk
         if (saveFile.exists()) {
             PhotoLibrary loaded = PhotoLibrary.loadFromFile("photos.ser");
             if (loaded != null) {
@@ -35,7 +38,6 @@ public class PhotoApp {
             }
             System.out.println("Failed to load photo library. Creating new one.");
         }
-        System.out.println("works");
         return new AlbumLibrary();
     }
 }

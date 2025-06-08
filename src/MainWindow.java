@@ -26,7 +26,7 @@ public class MainWindow extends JFrame {
     public void initializeComponents() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        photoListPanel = new PhotoListDisplay();
+        photoListPanel = new PhotoListDisplay(this);
         mainPanel.add(photoListPanel.getSplitPane());
         frame.add(mainPanel);
     }

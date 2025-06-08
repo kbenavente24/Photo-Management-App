@@ -1,4 +1,3 @@
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
@@ -7,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoController implements Serializable{
@@ -38,6 +36,15 @@ public class PhotoController implements Serializable{
         saveAlbumLibraryToFile();
     }
 
+    public List<Album> getAlbumCollection(){
+        return this.albumLibrary.getAllAlbums();
+    }
+
+    public void addPhotoToAlbum(Photo photo, Album album){
+        Photo photoFromLibrary = photoLibrary.getPhotoByPath(photo.getFilePath());
+        album.addPhotoToAlbum(photoFromLibrary);
+    }
+
     public void importPhotos(JFrame parent){
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -62,7 +69,7 @@ public class PhotoController implements Serializable{
     public boolean isImageFile(File file) {
         String name = file.getName().toLowerCase();
         return name.endsWith(".jpg") || name.endsWith(".jpeg") ||
-                name.endsWith(".png") || name.endsWith(".gif");
+                name.endsWith(".png");
     }
 
     public void saveLibraryToFile(){
@@ -94,12 +101,32 @@ public class PhotoController implements Serializable{
                 view.getPhotoListPanel().addPhotoToList(photo);
             }
         }
+    }   
+
+    public void checkAndDisplayFromAlbum(Album album){
+        view.getPhotoListPanel().clearImageList();
+        List<Photo> listOfPhotosFromAlbum = album.getListOfPhotosFromAlbum();
+        for(Photo photo : listOfPhotosFromAlbum){
+            view.getPhotoListPanel().addPhotoToList(photo);
+        }
     }
-    
+
+    public void displayOnlyAlbums(){
+        view.getPhotoListPanel().clearImageList();
+        List<Album> albums = albumLibrary.getAllAlbums();
+        for(Album album : albums){
+            view.getPhotoListPanel().addAlbumToList(album);
+        }
+    }
+
     public void reloadAllImages(){
         view.getPhotoListPanel().clearImageList();
         view.getPhotoListPanel().generateImageList(photoLibrary.getAllPhotos());
         view.getPhotoListPanel().generateAlbumList(albumLibrary.getAllAlbums());
+    }
+
+    public void clearFavorite(){
+        view.getPhotoListPanel().clearFavorite();
     }
 
 }

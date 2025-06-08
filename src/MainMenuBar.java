@@ -3,12 +3,16 @@ import javax.swing.*;
 public class MainMenuBar extends JMenuBar {
     private final JFrame parentFrame;
     private PhotoController controller;
+    private MainWindow mainWindow;
+
     public MainMenuBar(MainWindow mainWindow, JFrame parentFrame) {
         this.parentFrame = parentFrame;
+        this.mainWindow = mainWindow;
 
         add(createHelpMenu());
         add(createFileMenu());
         add(createFilterMenu());
+        add(createSortMenu());
         add(Box.createHorizontalGlue());
         add(createSignInButton());
     }
@@ -34,6 +38,12 @@ public class MainMenuBar extends JMenuBar {
         helpMenu.add(aboutItem);
         return helpMenu;
     }
+    private JMenu createSortMenu() {
+        JMenu sortMenu = new JMenu("Sort By");
+        JMenuItem sortItem = new JMenuItem("File Name (A-Z)");
+        sortMenu.add(sortItem);
+        return sortMenu;
+    }
 
     private JButton createSignInButton() {
         JButton signInButton = new JButton("Sign In");
@@ -42,10 +52,11 @@ public class MainMenuBar extends JMenuBar {
     }
 
     private JMenuItem createFilterMenu(){
-        JMenu filterMenu = new JMenu("Filter");
-        JMenuItem allItem = new JMenuItem("Show All");
+        JMenu filterMenu = new JMenu("Filter By");
+        JMenuItem allItem = new JMenuItem("All");
         allItem.addActionListener(e -> {
             controller.reloadAllImages();
+            controller.clearFavorite();
         });
 
         filterMenu.add(allItem);
@@ -53,10 +64,20 @@ public class MainMenuBar extends JMenuBar {
         JMenuItem favoritesItem = new JMenuItem("Favorites");
         favoritesItem.addActionListener(e -> {
             controller.checkAndDisplayFavorites();
+            controller.clearFavorite();
         });
         filterMenu.add(favoritesItem);
+        JMenuItem albumsItem = new JMenuItem("Albums");
+        albumsItem.addActionListener(e -> {
+            controller.displayOnlyAlbums();
+            controller.clearFavorite();
+        });
+        filterMenu.add(albumsItem);
+
         return filterMenu;
     }
+
+
 
     private void showAboutDialog() {
         String message = String.format(
@@ -69,7 +90,7 @@ public class MainMenuBar extends JMenuBar {
                 AboutInfo.USER_EMAIL
         );
 
-        JOptionPane.showMessageDialog(this, message, "About", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this.mainWindow, message, "About", JOptionPane.PLAIN_MESSAGE);
     }
 
     public void showSignInDialog() {
@@ -97,7 +118,7 @@ public class MainMenuBar extends JMenuBar {
             String username = usernameField.getText();
             String email = emailField.getText();
 
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(this.mainWindow,
                     "Signed in as:\nUsername: " + username + "\nEmail: " + email);
 
             AboutInfo.USER_NAME = username;
