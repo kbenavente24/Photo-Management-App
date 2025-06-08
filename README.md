@@ -16,11 +16,12 @@ In Development – Core UI and photo importing/browsing is functional. Currently
 ✅ Implemented
 - Import and view local image files<br>
 - User-friendly GUI built with Java Swing<br>
+- Favoriting and album creation<br>
+- Filtering by favorites and albums<br>
+- Persistent storage of photos, favorites and albums <br>
 
 ⏳ Planned
-- Favoriting and search functionality<br>
+- Search functionality<br>
 - Sort/filter images by date, name, or file type<br>
-- Album creation and management<br>
-- Tagging system for easier categorization<br>
+- Commenting/Descriptions on photos<br>
 - Lightweight database integration (e.g., SQLite) for storing metadata<br>
-- Persistent storage of favorites, tags, and albums<br>
