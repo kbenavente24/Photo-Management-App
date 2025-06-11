@@ -2,7 +2,7 @@ import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Album implements Serializable{
+public class Album implements Serializable, ListItem{
     List<Photo> photoCollection = new ArrayList<Photo>();
     private String title;
     private Boolean isFavorite;
@@ -16,6 +16,7 @@ public class Album implements Serializable{
         photoCollection.add(photo);
     }
 
+    @Override
     public void setFavorite(){
         if(this.isFavorite == false){
             this.isFavorite = true;
@@ -30,6 +31,11 @@ public class Album implements Serializable{
 
     public Boolean getFavoriteStatus(){
         return this.isFavorite;
+    }
+
+    @Override
+    public String getName(){
+        return this.title;
     }
 
     @Override

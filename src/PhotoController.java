@@ -1,3 +1,4 @@
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
@@ -6,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoController implements Serializable{
@@ -116,6 +118,41 @@ public class PhotoController implements Serializable{
         List<Album> albums = albumLibrary.getAllAlbums();
         for(Album album : albums){
             view.getPhotoListPanel().addAlbumToList(album);
+        }
+    }
+
+    public void sortListModel(DefaultListModel<Object> model) {
+        List<Object> items = new ArrayList<>();
+    
+        // Step 1: Copy elements from the model
+        for (int i = 0; i < model.size(); i++) {
+            items.add(model.get(i));
+        }
+    
+        // Step 2: Sort using a custom comparator (no ternary)
+        items.sort((o1, o2) -> {
+            String name1;
+            String name2;
+    
+            if (o1 instanceof ListItem) {
+                name1 = ((ListItem) o1).getName();
+            } else {
+                name1 = o1.toString();
+            }
+    
+            if (o2 instanceof ListItem) {
+                name2 = ((ListItem) o2).getName();
+            } else {
+                name2 = o2.toString();
+            }
+    
+            return name1.compareToIgnoreCase(name2);
+        });
+    
+        // Step 3: Clear and repopulate the model
+        model.clear();
+        for (Object item : items) {
+            model.addElement(item);
         }
     }
 

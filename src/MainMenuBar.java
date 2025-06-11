@@ -41,6 +41,9 @@ public class MainMenuBar extends JMenuBar {
     private JMenu createSortMenu() {
         JMenu sortMenu = new JMenu("Sort By");
         JMenuItem sortItem = new JMenuItem("File Name (A-Z)");
+        sortItem.addActionListener(e -> {
+            controller.sortListModel(mainWindow.getPhotoListPanel().getDefaultListModel());
+        });
         sortMenu.add(sortItem);
         return sortMenu;
     }

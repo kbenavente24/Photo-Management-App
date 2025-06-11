@@ -259,6 +259,10 @@ public class PhotoListDisplay extends JPanel{
         listModel.clear();
     }
 
+    public DefaultListModel<Object> getDefaultListModel(){
+        return this.listModel;
+    }
+
     public void clearFavorite(){
         this.currentlySelectedObject = null;
         changeFavoriteIcon();
