@@ -124,12 +124,10 @@ public class PhotoController implements Serializable{
     public void sortListModel(DefaultListModel<Object> model) {
         List<Object> items = new ArrayList<>();
     
-        // Step 1: Copy elements from the model
         for (int i = 0; i < model.size(); i++) {
             items.add(model.get(i));
         }
     
-        // Step 2: Sort using a custom comparator (no ternary)
         items.sort((o1, o2) -> {
             String name1;
             String name2;
@@ -149,7 +147,6 @@ public class PhotoController implements Serializable{
             return name1.compareToIgnoreCase(name2);
         });
     
-        // Step 3: Clear and repopulate the model
         model.clear();
         for (Object item : items) {
             model.addElement(item);
