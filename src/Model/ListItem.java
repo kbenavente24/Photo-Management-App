@@ -1,3 +1,4 @@
+package Model;
 public interface ListItem {
     String getName();
     

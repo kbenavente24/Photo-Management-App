@@ -1,4 +1,11 @@
+package App;
 import java.io.File;
+
+import Controller.PhotoController;
+import Model.AlbumLibrary;
+import Model.ExportImportUserInfo;
+import Model.PhotoLibrary;
+import View.MainWindow;
 
 public class PhotoApp {
 

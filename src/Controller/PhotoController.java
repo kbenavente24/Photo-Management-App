@@ -1,6 +1,14 @@
+package Controller;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+
+import Model.Album;
+import Model.AlbumLibrary;
+import Model.ListItem;
+import Model.Photo;
+import Model.PhotoLibrary;
+import View.MainWindow;
 
 import java.io.File;
 import java.io.FileOutputStream;

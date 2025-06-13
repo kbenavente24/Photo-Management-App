@@ -1,3 +1,4 @@
+package Model;
 public class AboutInfo {
     public static  String VERSION = "0.80";
     public static  String USER_NAME = "No name registered. Sign in to add a name.";

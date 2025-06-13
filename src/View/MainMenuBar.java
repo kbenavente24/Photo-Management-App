@@ -1,4 +1,9 @@
+package View;
 import javax.swing.*;
+
+import Controller.PhotoController;
+import Model.AboutInfo;
+import Model.ExportImportUserInfo;
 
 public class MainMenuBar extends JMenuBar {
     private final JFrame parentFrame;

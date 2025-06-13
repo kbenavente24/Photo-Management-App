@@ -1,9 +1,14 @@
+package View;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
 import java.util.List;
 
 import javax.swing.*;
+
+import Controller.PhotoController;
+import Model.Album;
+import Model.Photo;
 
 public class PhotoListDisplay extends JPanel{
     // Scroll bar panel which will carry the container of photos and albums

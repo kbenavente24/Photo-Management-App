@@ -1,4 +1,7 @@
+package View;
 import javax.swing.*;
+
+import Controller.PhotoController;
 
 public class MainWindow extends JFrame {
 

@@ -1,3 +1,4 @@
+package App;
 import javax.swing.SwingUtilities;
 
 public class Main {
