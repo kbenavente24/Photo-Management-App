@@ -102,11 +102,11 @@ public class MediaLibraryPanel extends JPanel{
         if(currentlySelectedObject instanceof Album){
             Album objectToAlbum = (Album) currentlySelectedObject;
             if(objectToAlbum.getFavoriteStatus() == false){
-                ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+                ImageIcon emptyHeartButtonImage = new ImageIcon(getClass().getResource("/Resources/EmptyHeart.png"));
                 Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
                 favoriteButton.setIcon(new ImageIcon(scaledImage));
             }   else {
-                ImageIcon fullHeartButtonImage = new ImageIcon("src/Resources/FullHeart.png");
+                ImageIcon fullHeartButtonImage = new ImageIcon(getClass().getResource("/Resources/FullHeart.png"));
                 Image scaledImage = fullHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
                 favoriteButton.setIcon(new ImageIcon(scaledImage));
             }
@@ -114,17 +114,17 @@ public class MediaLibraryPanel extends JPanel{
         } else if(currentlySelectedObject instanceof Photo){
             Photo objectToPhoto = (Photo) currentlySelectedObject;
             if(objectToPhoto.getFavoriteStatus() == false){
-                ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+                ImageIcon emptyHeartButtonImage = new ImageIcon(getClass().getResource("/Resources/EmptyHeart.png"));
                 Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
                 favoriteButton.setIcon(new ImageIcon(scaledImage));
             }   else {
-                ImageIcon fullHeartButtonImage = new ImageIcon("src/Resources/FullHeart.png");
+                ImageIcon fullHeartButtonImage = new ImageIcon(getClass().getResource("/Resources/FullHeart.png"));
                 Image scaledImage = fullHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
                 favoriteButton.setIcon(new ImageIcon(scaledImage));
             }
             controller.saveLibraryToFile();
         } else {
-            ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+            ImageIcon emptyHeartButtonImage = new ImageIcon(getClass().getResource("/Resources/EmptyHeart.png"));
             Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
             favoriteButton.setIcon(new ImageIcon(scaledImage));
         }
@@ -136,7 +136,7 @@ public class MediaLibraryPanel extends JPanel{
 
         JPanel buttonPanel = new JPanel();
 
-        ImageIcon emptyHeartButtonImage = new ImageIcon("src/Resources/EmptyHeart.png");
+        ImageIcon emptyHeartButtonImage = new ImageIcon(getClass().getResource("/Resources/EmptyHeart.png"));
         Image scaledImage = emptyHeartButtonImage.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         favoriteButton = new JButton(new ImageIcon(scaledImage));
 
