@@ -1,16 +1,16 @@
 package View;
 import javax.swing.*;
 
-import Controller.PhotoController;
-import Model.AboutInfo;
-import Model.ExportImportUserInfo;
+import Controller.LibraryController;
+import Model.UserVersionInfo;
+import Model.UserInfoPersistence;
 
-public class MainMenuBar extends JMenuBar {
+public class MenuBar extends JMenuBar {
     private final JFrame parentFrame;
-    private PhotoController controller;
+    private LibraryController controller;
     private MainWindow mainWindow;
 
-    public MainMenuBar(MainWindow mainWindow, JFrame parentFrame) {
+    public MenuBar(MainWindow mainWindow, JFrame parentFrame) {
         this.parentFrame = parentFrame;
         this.mainWindow = mainWindow;
 
@@ -22,7 +22,7 @@ public class MainMenuBar extends JMenuBar {
         add(createSignInButton());
     }
 
-    public void setController(PhotoController controller){
+    public void setController(LibraryController controller){
         this.controller = controller;
     }
 
@@ -85,17 +85,15 @@ public class MainMenuBar extends JMenuBar {
         return filterMenu;
     }
 
-
-
     private void showAboutDialog() {
         String message = String.format(
                 "<html><h2>Photo Manager</h2>"
                         + "<p><strong>Version:</strong> %s</p>"
                         + "<p><strong>User:</strong> %s</p>"
                         + "<p><strong>Email:</strong> %s</p></html>",
-                AboutInfo.VERSION,
-                AboutInfo.USER_NAME,
-                AboutInfo.USER_EMAIL
+                UserVersionInfo.VERSION,
+                UserVersionInfo.USER_NAME,
+                UserVersionInfo.USER_EMAIL
         );
 
         JOptionPane.showMessageDialog(this.mainWindow, message, "About", JOptionPane.PLAIN_MESSAGE);
@@ -129,9 +127,9 @@ public class MainMenuBar extends JMenuBar {
             JOptionPane.showMessageDialog(this.mainWindow,
                     "Signed in as:\nUsername: " + username + "\nEmail: " + email);
 
-            AboutInfo.USER_NAME = username;
-            AboutInfo.USER_EMAIL = email;
-            ExportImportUserInfo.save();
+            UserVersionInfo.USER_NAME = username;
+            UserVersionInfo.USER_EMAIL = email;
+            UserInfoPersistence.save();
         }
     }
 }

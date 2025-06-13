@@ -1,44 +1,44 @@
 package View;
 import javax.swing.*;
 
-import Controller.PhotoController;
+import Controller.LibraryController;
 
 public class MainWindow extends JFrame {
 
     private final JFrame frame;
-    private PhotoListDisplay photoListPanel;
-    private MainMenuBar mainMenuBar;
-    private PhotoController controller;
+    private MediaLibraryPanel photoListPanel;
+    private MenuBar mainMenuBar;
+    private LibraryController controller;
 
     public MainWindow() {
         frame = new JFrame("Photo Manager");
         frame.setSize(900, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        mainMenuBar = new MainMenuBar(this, frame);
+        mainMenuBar = new MenuBar(this, frame);
         frame.setJMenuBar(mainMenuBar);
 
         initializeComponents();
         frame.setVisible(true);
     }
 
-    public void setController(PhotoController controller){
+    public void setController(LibraryController controller){
         this.controller = controller;
     }
 
     public void initializeComponents() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        photoListPanel = new PhotoListDisplay(this);
+        photoListPanel = new MediaLibraryPanel(this);
         mainPanel.add(photoListPanel.getSplitPane());
         frame.add(mainPanel);
     }
 
-    public PhotoListDisplay getPhotoListPanel(){
+    public MediaLibraryPanel getPhotoListPanel(){
         return this.photoListPanel;
     }
 
-    public MainMenuBar getMainMenuBar(){
+    public MenuBar getMainMenuBar(){
         return this.mainMenuBar;
     }
 }

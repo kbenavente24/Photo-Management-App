@@ -28,16 +28,15 @@ public class Photo implements Serializable, ListItem{
     @Override
     public String getName(){
         File photoFile = new File(filePath);
-        String fileName = photoFile.getName(); // or file.getAbsolutePath();
+        String fileName = photoFile.getName(); 
 
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
-            return fileName.substring(0, dotIndex); // "vacation"
+            return fileName.substring(0, dotIndex);
         } else {
-            return fileName; // return as-is if no extension found
+            return fileName;
         }
     }
-
 
     @Override
     public Boolean getFavoriteStatus(){
@@ -47,7 +46,6 @@ public class Photo implements Serializable, ListItem{
     @Override
     public String toString() {
         File photoFile = new File(filePath);
-        return photoFile.getName(); // or file.getAbsolutePath();
+        return photoFile.getName(); 
     }
-
 }

@@ -23,7 +23,6 @@ public class AlbumLibrary implements Serializable {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
             return (AlbumLibrary) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            // Return empty if loading fails
             e.printStackTrace();
             return null;
         }

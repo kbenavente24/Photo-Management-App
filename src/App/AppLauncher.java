@@ -1,10 +1,10 @@
 package App;
 import javax.swing.SwingUtilities;
 
-public class Main {
+public class AppLauncher {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new PhotoApp().start();
+            new AppInitializer().start();
         });
     }
 }

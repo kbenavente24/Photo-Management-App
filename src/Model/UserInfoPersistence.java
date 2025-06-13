@@ -1,15 +1,15 @@
 package Model;
 import java.io.*;
 
-public class ExportImportUserInfo implements Serializable {
+public class UserInfoPersistence {
 
     public static void save() {
         String filename = "UserInfo.bin";
         try {
             FileOutputStream fos = new FileOutputStream(filename);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(AboutInfo.USER_NAME);
-            oos.writeObject(AboutInfo.USER_EMAIL);
+            oos.writeObject(UserVersionInfo.USER_NAME);
+            oos.writeObject(UserVersionInfo.USER_EMAIL);
             oos.close();
         } catch (IOException e){
             e.printStackTrace();
@@ -27,8 +27,8 @@ public class ExportImportUserInfo implements Serializable {
             ObjectInputStream ois = new ObjectInputStream(fin);
             String userName = (String) ois.readObject();
             String userEmail = (String) ois.readObject();
-            AboutInfo.USER_NAME = userName;
-            AboutInfo.USER_EMAIL = userEmail;
+            UserVersionInfo.USER_NAME = userName;
+            UserVersionInfo.USER_EMAIL = userEmail;
 
             ois.close();
         } catch (IOException e){
@@ -37,5 +37,4 @@ public class ExportImportUserInfo implements Serializable {
             throw new RuntimeException(e);
         }
     }
-
 }

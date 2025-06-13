@@ -18,13 +18,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoController implements Serializable{
+/**
+ * Controls the logic and interaction between the photo and album models
+ * and the main application view.
+ * Manages adding, importing, saving, and displaying photo and album data.
+ * 
+ * @author Kobe Benavente
+ * @version 1.0
+ */
+public class LibraryController implements Serializable{
 
     private final PhotoLibrary photoLibrary;
     private final AlbumLibrary albumLibrary;
     private final MainWindow view;
 
-    public PhotoController(PhotoLibrary photoLibrary, AlbumLibrary albumLibrary,
+    public LibraryController(PhotoLibrary photoLibrary, AlbumLibrary albumLibrary,
     MainWindow view){
         this.photoLibrary = photoLibrary;
         this.albumLibrary = albumLibrary;
@@ -170,5 +178,4 @@ public class PhotoController implements Serializable{
     public void clearFavorite(){
         view.getPhotoListPanel().clearFavorite();
     }
-
 }

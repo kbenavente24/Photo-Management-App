@@ -6,15 +6,15 @@ import java.util.List;
 
 import javax.swing.*;
 
-import Controller.PhotoController;
+import Controller.LibraryController;
 import Model.Album;
 import Model.Photo;
 
-public class PhotoListDisplay extends JPanel{
-    // Scroll bar panel which will carry the container of photos and albums
+public class MediaLibraryPanel extends JPanel{
+
     private final JScrollPane scrollPane;
 
-    private PhotoController controller;
+    private LibraryController controller;
 
     private DefaultListModel<Object> listModel;
 
@@ -30,10 +30,9 @@ public class PhotoListDisplay extends JPanel{
 
     private MainWindow mainWindow;
 
-    
     private JButton favoriteButton;
 
-    public PhotoListDisplay(MainWindow mainWindow){
+    public MediaLibraryPanel(MainWindow mainWindow){
         this.mainWindow = mainWindow;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -90,7 +89,7 @@ public class PhotoListDisplay extends JPanel{
             public Component getListCellRendererComponent(JList<?> list, Object value, int index,
                                                           boolean isSelected, boolean cellHasFocus) {
                 if (value instanceof Photo photo) {
-                    value = "📷 " + photo; // Only display the file name
+                    value = "📷 " + photo; 
                 } else if (value instanceof Album album){
                     value = "📁 " + album;
                 }
@@ -248,7 +247,7 @@ public class PhotoListDisplay extends JPanel{
         listModel.addElement(album);
     }
 
-    public void setController(PhotoController controller){
+    public void setController(LibraryController controller){
         this.controller = controller;
     }
 
@@ -273,5 +272,4 @@ public class PhotoListDisplay extends JPanel{
         changeFavoriteIcon();
         previewLabel.setIcon(null);
     }
-
 }
